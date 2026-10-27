@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b45">
+  <title>EcoSaúde Digital | Registro de ocorrência</title>
+  <style>
+    :root {
+      --green: #176b45;
+      --green-dark: #104b31;
+      --green-light: #e8f5ed;
+      --ink: #183329;
+      --muted: #61736a;
+      --line: #dce7df;
+      --bg: #f4f8f5;
+      --white: #fff;
+      --warning: #fff7df;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    .topbar { height: 7px; background: var(--green); }
+    .wrap { width: min(100% - 28px, 720px); margin: 0 auto; padding: 22px 0 42px; }
+    header {
+      background: linear-gradient(135deg, #176b45, #27885b);
+      color: white; padding: 26px 22px; border-radius: 20px; margin-bottom: 18px;
+      box-shadow: 0 8px 24px #174c3020;
+    }
+    .brand { display: flex; gap: 12px; align-items: center; }
+    .logo {
+      width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center;
+      border-radius: 15px; background: #ffffff20; font-size: 27px;
+    }
+    h1 { font-size: clamp(1.5rem, 5vw, 2rem); line-height: 1.15; margin: 0; }
+    header p { margin: 12px 0 0; color: #e8f6ed; }
+    .pill { display: inline-block; font-size: .78rem; border: 1px solid #ffffff60; border-radius: 99px; padding: 4px 10px; margin-top: 15px; }
+    .notice {
+      background: var(--warning); border: 1px solid #f0dfaa; border-radius: 14px;
+      padding: 13px 15px; font-size: .9rem; margin: 0 0 18px;
+    }
+    form, .panel { background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 20px; margin-bottom: 16px; }
+    h2 { font-size: 1.12rem; margin: 0 0 5px; }
+    .section-intro { color: var(--muted); font-size: .9rem; margin: 0 0 18px; }
+    .field { margin: 0 0 17px; }
+    label, .legend { display: block; font-weight: 650; font-size: .94rem; margin-bottom: 7px; }
+    .required { color: #a52b2b; }
+    input, select, textarea {
+      width: 100%; min-height: 46px; border: 1px solid #cbd9cf; border-radius: 11px;
+      background: white; color: var(--ink); padding: 11px 12px; font: inherit;
+    }
+    textarea { min-height: 105px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { outline: 3px solid #176b4525; border-color: var(--green); }
+    .hint { color: var(--muted); font-size: .82rem; margin: 6px 0 0; }
+    .file-box { border: 1.5px dashed #a9c7b3; border-radius: 13px; padding: 15px; background: #fbfdfb; }
+    input[type="file"] { padding: 8px; min-height: auto; border: 0; background: transparent; }
+    .preview { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .preview img { width: 100%; height: 100px; object-fit: cover; border-radius: 9px; border: 1px solid var(--line); }
+    .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: .87rem; }
+    .check input { width: 18px; height: 18px; min-height: 18px; margin-top: 3px; flex: 0 0 auto; }
+    button, .link-button {
+      border: 0; display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+      min-height: 48px; border-radius: 12px; padding: 12px 16px; font: inherit; font-weight: 700;
+      text-align: center; cursor: pointer; text-decoration: none;
+    }
+    .primary { background: var(--green); color: white; width: 100%; }
+    .primary:hover { background: var(--green-dark); }
+    .secondary { background: var(--green-light); color: var(--green-dark); width: 100%; border: 1px solid #c4e0cd; }
+    .actions { display: grid; gap: 10px; }
+    .result { display: none; }
+    .result.show { display: block; }
+    .result textarea { min-height: 170px; margin: 10px 0; }
+    .official { display: grid; gap: 10px; margin-top: 12px; }
+    .official a { color: var(--green-dark); text-decoration: underline; overflow-wrap: anywhere; }
+    .footer { color: var(--muted); font-size: .8rem; text-align: center; padding: 8px 8px 0; }
+    .status { min-height: 1.4em; color: var(--green-dark); font-size: .9rem; margin: 8px 0 0; }
+    @media (min-width: 600px) {
+      .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .two-col .field { margin-bottom: 17px; }
+      form, .panel { padding: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <main class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">🌿</div>
+        <div>
+          <h1>EcoSaúde Digital</h1>
+          <div>Mapeamento e Monitoramento Comunitário de Vetores e Poluição</div>
+        </div>
+      </div>
+      <p>Ajude a identificar ocorrências que podem afetar a saúde e o meio ambiente da sua comunidade.</p>
+      <span class="pill">Ferramenta comunitária de orientação</span>
+    </header>
+
+    <div class="notice">
+      <strong>Importante:</strong> este formulário prepara um resumo para facilitar o registro. Ele não envia a denúncia à Prefeitura nem gera protocolo oficial. O envio deve ser concluído no canal público.
+    </div>
+
+    <form id="reportForm">
+      <h2>Registrar ocorrência</h2>
+      <p class="section-intro">Preencha os dados que souber. Evite incluir informações pessoais de terceiros.</p>
+
+      <div class="field">
+        <label for="tipo">Tipo de ocorrência <span class="required">*</span></label>
+        <select id="tipo" required>
+          <option value="">Selecione uma opção</option>
+          <option>Foco de dengue ou mosquito</option>
+          <option>Outros vetores ou animais transmissores</option>
+          <option>Poluição do ar ou fumaça</option>
+          <option>Contaminação do solo ou da água</option>
+          <option>Descarte irregular de resíduos</option>
+          <option>Água parada ou esgoto</option>
+          <option>Outro problema ambiental</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="municipio">Município <span class="required">*</span></label>
+        <select id="municipio" required>
+          <option value="São Paulo (capital)">São Paulo (capital)</option>
+          <option value="Outro município">Outro município</option>
+        </select>
+        <p class="hint">O canal SP156 é da Prefeitura da cidade de São Paulo. Para outro município, confirme o canal da prefeitura local.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="bairro">Bairro</label>
+          <input id="bairro" autocomplete="address-level3" placeholder="Ex.: Vila Mariana">
+        </div>
+        <div class="field">
+          <label for="endereco">Endereço ou ponto de referência <span class="required">*</span></label>
+          <input id="endereco" required autocomplete="street-address" placeholder="Rua, número ou local próximo">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="descricao">O que você observou? <span class="required">*</span></label>
+        <textarea id="descricao" required maxlength="1200" placeholder="Descreva o problema, quando foi observado e outros detalhes úteis."></textarea>
+        <p class="hint">Até 1.200 caracteres.</p>
+      </div>
+
+      <div class="field">
+        <label for="fotos">Fotos da ocorrência (opcional)</label>
+        <div class="file-box">
+          <input id="fotos" type="file" accept="image/*" capture="environment" multiple>
+          <p class="hint">Você pode selecionar até 3 imagens. As fotos ficam neste dispositivo e não são enviadas por esta página. Será necessário anexá-las novamente no portal oficial.</p>
+          <div class="preview" id="preview" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="check"><input id="confirm" type="checkbox" required> <span>Confirmo que as informações descrevem o que observei e entendo que preciso concluir a denúncia no portal oficial.</span></label>
+      </div>
+
+      <div class="actions">
+        <button class="primary" type="submit">Preparar denúncia oficial <span aria-hidden="true">↗</span></button>
+        <button class="secondary" type="button" id="resetBtn">Limpar formulário</button>
+      </div>
+      <p class="status" id="formStatus" role="status"></p>
+    </form>
+
+    <section class="panel result" id="resultPanel" aria-labelledby="resultTitle">
+      <h2 id="resultTitle">Seu resumo está pronto</h2>
+      <p class="section-intro">Copie o texto abaixo e cole na descrição do serviço oficial, se houver esse campo. Confira e ajuste as informações no portal.</p>
+      <textarea id="summary" readonly aria-label="Resumo da ocorrência"></textarea>
+      <div class="actions">
+        <button class="primary" type="button" id="copyBtn">Copiar resumo</button>
+        <a class="link-button secondary" id="portalLink" href="https://sp156.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Abrir Portal SP156 ↗</a>
+      </div>
+      <p class="status" id="copyStatus" role="status"></p>
+      <div class="official">
+        <strong>Antes de enviar</strong>
+        <span>1. Selecione no SP156 o serviço que corresponde à ocorrência.</span>
+        <span>2. Preencha os campos exigidos pelo portal e anexe as fotos novamente, se solicitado.</span>
+        <span>3. Conclua o registro e guarde o protocolo oficial.</span>
+        <span>Para outro município, use o site oficial da prefeitura responsável.</span>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Projeto de extensão acadêmica · EcoSaúde Digital<br>
+      Esta página não é um canal oficial da Prefeitura e não substitui o registro da ocorrência no serviço público.
+    </footer>
+  </main>
+
+  <script>
+    const form = document.getElementById('reportForm');
+    const photos = document.getElementById('fotos');
+    const preview = document.getElementById('preview');
+    const resultPanel = document.getElementById('resultPanel');
+    const summary = document.getElementById('summary');
+    const status = document.getElementById('formStatus');
+    const copyStatus = document.getElementById('copyStatus');
+    const portalLink = document.getElementById('portalLink');
+
+    photos.addEventListener('change', () => {
+      preview.replaceChildren();
+      const files = Array.from(photos.files || []);
+      if (files.length > 3) {
+        alert('Selecione no máximo 3 fotos.');
+        photos.value = '';
+        return;
+      }
+      files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const img = document.createElement('img');
+        img.alt = 'Prévia de foto selecionada';
+        img.src = URL.createObjectURL(file);
+        preview.appendChild(img);
+      });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const tipo = document.getElementById('tipo').value;
+      const municipio = document.getElementById('municipio').value;
+      const bairro = document.getElementById('bairro').value.trim() || 'Não informado';
+      const endereco = document.getElementById('endereco').value.trim();
+      const descricao = document.getElementById('descricao').value.trim();
+      const data = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(new Date());
+
+      const lines = [
+        'ECO SAÚDE DIGITAL — RESUMO DE OCORRÊNCIA AMBIENTAL',
+        'Data de preenchimento: ' + data,
+        'Tipo de ocorrência: ' + tipo,
+        'Município: ' + municipio,
+        'Bairro: ' + bairro,
+        'Endereço/ponto de referência: ' + endereco,
+        'Descrição: ' + descricao,
+        'Fotos selecionadas neste dispositivo: ' + (photos.files.length ? photos.files.length + ' (anexar novamente no portal oficial)' : 'Nenhuma'),
+        '',
+        'Observação: este resumo foi preparado pelo EcoSaúde Digital. A denúncia oficial ainda precisa ser registrada no canal público.'
+      ];
+      summary.value = lines.join('\n');
+      portalLink.href = 'https://sp156.prefeitura.sp.gov.br/';
+      resultPanel.classList.add('show');
+      status.textContent = 'Resumo preparado. Revise os dados abaixo e abra o portal oficial.';
+      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(summary.value);
+        copyStatus.textContent = 'Resumo copiado. Agora você pode colá-lo no portal oficial.';
+      } catch (e) {
+        summary.focus();
+        summary.select();
+        copyStatus.textContent = 'Não foi possível copiar automaticamente. Selecione o texto e use Copiar.';
+      }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      form.reset();
+      preview.replaceChildren();
+      resultPanel.classList.remove('show');
+      status.textContent = '';
+      copyStatus.textContent = '';
+      summary.value = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
